@@ -1,0 +1,17 @@
+
+void count(Node* root, int &cnt){
+       if(!root)return;
+       
+       if(root->left== NULL && root->right==NULL){
+           cnt++;
+       }
+       count(root->left, cnt);
+       count(root->right, cnt);
+   }
+
+int countLeaves(Node* root)
+{
+   int cnt = 0;
+   count(root, cnt);
+   return cnt;
+}
