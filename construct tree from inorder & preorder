@@ -1,0 +1,77 @@
+
+
+................leetCode solution ..........................
+
+
+  class Solution {
+public:
+
+ TreeNode*BuildTree(vector<int>& pre, vector<int>& in,int inStart, int inEnd,
+      int& preorderIndex, map<int,int>&mp){
+        if(inStart > inEnd)
+         return NULL;
+
+        // TreeNode*root=new TreeNode(pre[idx++]);
+        int element = pre[preorderIndex++];
+        TreeNode* root = new TreeNode(element);
+        int inOrderIndex= mp[root->val];   // mp[element]
+
+        root->left=BuildTree(pre, in, inStart, inOrderIndex-1, preorderIndex , mp );
+        root->right=BuildTree(pre, in, inOrderIndex+1 , inEnd, preorderIndex, mp);
+        return root;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        map<int,int>mp;
+        
+        int n=preorder.size();
+
+        int preorderIndex=0;
+
+        for(int i=0;i<n;i++){
+            mp[inorder[i]]=i;
+        }
+        return BuildTree(preorder,inorder,0,n-1,preorderIndex,mp);
+    }
+};
+
+
+
+
+...........gfg solution only passing 53 test cases.................
+
+  class Solution{
+    public:
+    
+    
+    Node* solve(int in[],int pre[],  int &index, int inorderStart, int inorderEnd , int n, map<int,int>&mp){
+        
+        if(index >= n || inorderStart > inorderEnd){
+            return NULL;
+        }
+        
+        int element = pre[index++];
+        Node* root = new Node(element);
+        int position = mp[element];
+        
+        root->left =  solve(in , pre, index , inorderStart,  position-1, n, mp);
+        root->right = solve(in , pre, index , position+1, inorderEnd, n, mp);
+        return root;
+        
+    }
+    
+    Node* buildTree(int in[],int pre[], int n)
+    {
+       
+       int preorderIndex = 0;
+       
+       map<int,int>mp;
+       for(int i = 0; i<n; i++){
+           mp[in[i]]=i;
+       }
+       Node* ans =  solve(in , pre, preorderIndex , 0, n-1, n, mp);
+       return ans;
+    }
+};
+
+  
