@@ -1,0 +1,74 @@
+
+........................... gfg solution...........................
+
+Node* solve(int in[],int post[],  int &index, int inorderStart, int inorderEnd , int n, map<int,int>&mp){
+        
+        if(index < 0  || inorderStart > inorderEnd){
+            return NULL;
+        }
+        
+        int element = post[index--];
+        Node* root = new Node(element);
+        int position = mp[element];
+        
+        root->right = solve(in , post, index , position+1, inorderEnd, n, mp);
+        root->left =  solve(in , post, index , inorderStart,  position-1, n, mp);
+        
+        return root;
+        
+    }
+Node *buildTree(int in[], int post[], int n) {
+    
+     int postorderIndex = n-1;
+       
+       map<int,int>mp;
+       for(int i = 0; i<n; i++){
+           mp[in[i]]=i;
+       }
+       Node* ans =  solve(in , post, postorderIndex , 0, n-1, n, mp);
+       return ans;
+   
+}
+
+
+..................... leetCode solution............................
+
+  class Solution {
+public:
+
+TreeNode*BuildTree(vector<int>& inorder, vector<int>& postorder,int inStart, int inEnd,
+      int& postorderIndex, map<int,int>&mp){
+        if(inStart > inEnd)
+         return NULL;
+
+        // TreeNode*root=new TreeNode(pre[idx++]);
+        int element = postorder[postorderIndex--];
+        TreeNode* root = new TreeNode(element);
+        int inOrderIndex= mp[root->val];   // mp[element]
+
+
+        root->right=BuildTree(inorder, postorder, inOrderIndex+1 , 
+        inEnd, postorderIndex, mp);
+        root->left=BuildTree(inorder, postorder, inStart,
+         inOrderIndex-1, postorderIndex , mp );
+       
+        return root;
+    }
+
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+         map<int,int>mp;
+        
+        int n = postorder.size();
+
+        int postorderIndex = n-1;
+
+        for(int i=0;i<n;i++){
+            mp[inorder[i]]=i;
+        }
+
+        TreeNode* ans =  BuildTree(inorder,postorder , 0, n-1 , 
+        postorderIndex , mp);
+        
+        return ans;
+    }
+};
